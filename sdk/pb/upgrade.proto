@@ -1,0 +1,62 @@
+syntax="proto3";
+
+package pb;
+
+message VersionRsp {
+    string version=1;
+    string branch=2;
+    string commit=3;
+    string modTime=4;
+}
+
+message Null {
+}
+
+message UploadReq {
+    string name=1;
+    bytes  data=2;
+}
+
+message UpdateReq {
+    string tag =1;
+    bytes  data=2;
+}
+
+message RollbackReq {
+    string version =1;
+}
+
+message RollbackRsp {
+    repeated string version =1;
+}
+
+message ExecReq {
+    string cmd =1;
+}
+
+message ExecRsp {
+    string data=1;
+}
+
+message SignalReq {
+    int32 signal=1;
+}
+
+message CommandReq {
+    string cmd =1;
+   repeated string args=2;
+}
+
+message CommandRsp {
+    string msg = 1;
+}
+
+service UpgradeService {
+    rpc Version(Null)returns(VersionRsp){};
+    rpc Upload(stream UploadReq) returns(Null){};
+    rpc Update(stream UpdateReq) returns(Null){};
+    rpc Rollback(RollbackReq)returns(RollbackRsp){};
+    rpc Exec(ExecReq)returns(ExecRsp){};
+    rpc Signal(SignalReq)returns(Null){};
+    rpc Command(CommandReq)returns(CommandRsp){};
+}
